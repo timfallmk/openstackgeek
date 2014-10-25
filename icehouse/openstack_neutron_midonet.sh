@@ -51,25 +51,14 @@ else
   cp /etc/neutron/neutron.conf /etc/neutron/neutron.conf.orig
 fi
 
-echo "
-rpc_backend = neutron.openstack.common.rpc.impl_kombu
-rabbit_host = localhost
-rabbit_port = 5672
-rabbit_userid = guest
-rabbit_password = guest
+# Edit the neutron.conf
+sed -i "s,connection = sqlite:////var/lib/neutron/neutron.sqlite,connection = mysql://neutron:$password@$managementip/neutron," /etc/neutron/neutron.conf
 
-[database]
-connection = mysql://neutron:$password@$managementip/neutron
+sed -i "# auth_strategy = keystone" "auth_strategy = keystone" /etc/neutron/neutron.conf
 
-[keystone_authtoken]
-auth_uri = http://$managementip:5000
-auth_host = $managementip
-auth_port = 35357
-auth_protocol = http
-admin_tenant_name = service
-admin_user = neutron
-admin_password = $password
-" >> /etc/neutron/neutron.conf
+sed -i "s,%SERVICE_TENANT_NAME%,service," /etc/neutron/neutron.conf
+sed -i "s,%SERVICE_USER%,neutron," /etc/neutron/neutron.conf
+sed -i "s,%SERVICE_PASSWORD%,$SG_SERVICE_PASSWORD," /etc/neutron/neutron.conf
 
 # Set container preferences
 touch /usr/share/tomcat7/Catalina/localhost/midonet-api.xml
