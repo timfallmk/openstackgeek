@@ -99,6 +99,18 @@ service zookeeper start
 # API configuration
 sed -i "s,999888777666,$SG_SERVICE_TOKEN"
 
+# Set qemu port ACL's (this is kinda hacky, I want to find a better way of doing this substitution)
+echo "
+cgroup_device_acl = [
+    \"/dev/null\", \"/dev/full\", \"/dev/zero\",
+    \"/dev/random\", \"/dev/urandom\",
+    \"/dev/ptmx\", \"/dev/kvm\", \"/dev/kqemu\",
+    \"/dev/rtc\",\"/dev/hpet\", \"/dev/vfio/vfio\", \"/dev/net/tun\"
+]
+" >> /etc/libvirt/qemu.conf
+
+service libvirt-bin restart
+
 # Restart tomcat
 service tomcat7 restart
 
