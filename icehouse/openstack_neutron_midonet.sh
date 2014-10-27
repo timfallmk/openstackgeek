@@ -42,6 +42,7 @@ curl -k http://debian.datastax.com/debian/repo_key | apt-key add -
 curl -k "http://$repousername:$repopassword@apt.midokura.com/packages.midokura.key" | apt-key add -
 
 # install packages
+apt-get update
 apt-get install -y neutron-server neutron-dhcp-agent neutron-metadata-agent
 apt-get install -y python-midonetclient python-neutron-plugin-midonet
 apt-get install -y midonet-api tomcat7 zookeeper zookeeperd zkdump cassandra=2.0.10
@@ -63,13 +64,36 @@ sed -i "s,%SERVICE_TENANT_NAME%,service," /etc/neutron/neutron.conf
 sed -i "s,%SERVICE_USER%,neutron," /etc/neutron/neutron.conf
 sed -i "s,%SERVICE_PASSWORD%,$SG_SERVICE_PASSWORD," /etc/neutron/neutron.conf
 
-sed -i "s,# auth_strategy = keystone,auth_strategy = keystone,"
+sed -i "s,# auth_strategy = keystone,auth_strategy = keystone," /etc/neutron/neutron.conf
 
-sed -i "s,core_plugin = neutron.plugins.ml2.plugin.Ml2Plugin,core_plugin = midonet.neutron.plugin.MidonetPluginV2,"
+sed -i "s,core_plugin = neutron.plugins.ml2.plugin.Ml2Plugin,core_plugin = midonet.neutron.plugin.MidonetPluginV2," /etc/neutron/neutron.conf
 
 # Edit the dhcp_agent.ini
-sed -i "s,# use_namespaces = True,use_namespaces = True,"
-sed -i "s,enable_isolated_metadata = False,enable_isolated_metadata = True,"
+sed -i "s,# use_namespaces = True,use_namespaces = True," /etc/neutron/dhcp_agent.ini
+sed -i "s,enable_isolated_metadata = False,enable_isolated_metadata = True," /etc/neutron/dhcp_agent.ini
+
+# Add midonet.ini
+mkdir /etc/neutron/plugins/midonet
+touch /etc/neutron/plugins/midonet/midonet.ini
+echo "
+[DATABASE]
+sql_connection = mysql://neutron:$password@$managementip/neutron
+[MIDONET]
+# MidoNet API URL
+midonet_uri = http://$managementip:8080/midonet-api
+# MidoNet administrative user in Keystone
+username = midonet
+password = $password
+# MidoNet administrative user's tenant
+project_id = admin
+" >> /etc/neutron/plugins/midonet/midonet.ini
+
+# Change the plugin used by neutron
+sed -i "s,NEUTRON_PLUGIN_CONFIG=\"/etc/neutron/plugins/ml2/ml2_conf.ini\",NEUTRON_PLUGIN_CONFIG=\"/etc/neutron/plugins/midonet/midonet.ini\"," /etc/default/neutron-server
+
+# Register the midonet user in keystone and add roles
+keystone user-create --name midonet --pass $password --email admin@localhost
+keystone user-role-add --user midonet --tenant admin --role admin
 
 # Set container preferences
 touch /usr/share/tomcat7/Catalina/localhost/midonet-api.xml
