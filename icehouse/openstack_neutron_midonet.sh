@@ -159,7 +159,7 @@ service nova-compute restart
 echo;
 echo "#################################################################################################
 
-Run ./openstack_loop.sh to setup the cinder-volumes loopback device.
+Your networking should now be configured.
 
 #################################################################################################"
 echo;
