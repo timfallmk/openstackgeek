@@ -48,7 +48,7 @@ apt-get install -y openjdk-7-jre-headless
 apt-get install -y neutron-server neutron-dhcp-agent neutron-metadata-agent
 apt-get install -y python-midonetclient python-neutron-plugin-midonet
 apt-get install -y tomcat7 zookeeper zookeeperd zkdump cassandra=2.0.10
-apt-get install -y midonet-api
+apt-get install -y midonet-api midolman
 apt-mark hold cassandra
 
 # edit keystone conf file to use templates and mysql
