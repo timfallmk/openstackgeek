@@ -44,6 +44,7 @@ curl -k "http://$repousername:$repopassword@apt.midokura.com/packages.midokura.k
 
 # install packages
 apt-get update
+apt-get install -y openjdk-7-jre-headless
 apt-get install -y neutron-server neutron-dhcp-agent neutron-metadata-agent
 apt-get install -y python-midonetclient python-neutron-plugin-midonet
 apt-get install -y tomcat7 zookeeper zookeeperd zkdump cassandra=2.0.10
