@@ -60,6 +60,10 @@ sed -i "s,%SERVICE_TENANT_NAME%,service," /etc/neutron/neutron.conf
 sed -i "s,%SERVICE_USER%,neutron," /etc/neutron/neutron.conf
 sed -i "s,%SERVICE_PASSWORD%,$SG_SERVICE_PASSWORD," /etc/neutron/neutron.conf
 
+# Edit the dhcp_agent.ini
+sed -i "s,# use_namespaces = True,use_namespaces = True,"
+sed -i "s,enable_isolated_metadata = False,enable_isolated_metadata = True,"
+
 # Set container preferences
 touch /usr/share/tomcat7/Catalina/localhost/midonet-api.xml
 echo "
@@ -71,18 +75,42 @@ echo "
 />
 " >> /usr/share/tomcat7/Catalina/localhost/midonet-api.xml
 
-# Start zookeeper and Cassandra
+# Stop zookeeper and Cassandra
 service cassandra stop
 service zookeeper stop
 
+# Zookeeper configuration
+echo "
+server.1=localhost:2888:3888
+" >> /etc/zookeeper/conf/zoo.conf
+touch /etc/zookeeper/conf/myid
+echo "1" >> /etc/zookeeper/conf/myid
+
+# Cassandra configuration
+sed -i "s,Test Cluster,midonet,"
+
 # Clear the Cassandra data directory
 rm -rf /var/lib/cassandra/data/
+
+# Start Zookeeper and Cassandra
+service cassandra start
+service zookeeper start
+
+# API configuration
+sed -i "s,999888777666,$SG_SERVICE_TOKEN"
+
+# Restart tomcat
+service tomcat7 restart
+
+# Start midolman
+sleep 10
+service midolman restart
 
 # restart neutron services
 service neutron-server restart
 service neutron-metadata-agent restart
 service neutron-dhcp-agent restart
-service  restart
+service nova-compute restart
 
 echo;
 echo "#################################################################################################
