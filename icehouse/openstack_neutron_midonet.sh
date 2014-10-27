@@ -26,13 +26,14 @@ read -p "Please enter your midokura repo username: " repousername
 echo;
 read -p "Please enter your midokura repo password: " repopassword
 
-$password=$SG_SERVICE_PASSWORD
-$managementip=$SG_SERVICE_CONTROLLER_IP
+password=$SG_SERVICE_PASSWORD
+managementip=$SG_SERVICE_CONTROLLER_IP
 
 # Add the apt source entries
 touch /etc/apt/sources.list.d/midokura.list
-echo "deb http://$repousername:$repopassword@apt.midokura.com/midonet/v1.7/stable trusty main non-free\n" >> /etc/apt/sources.list.d/midokura.list
-echo "deb http://$repousername:$repopassword@apt.midokura.com/openstack/icehouse/stable trusty main\n" >> /etc/apt/sources.list.d/midokura.list
+echo "deb http://$repousername:$repopassword@apt.midokura.com/midonet/v1.7/stable trusty main non-free
+" >> /etc/apt/sources.list.d/midokura.list
+echo "deb http://$repousername:$repopassword@apt.midokura.com/openstack/icehouse/stable trusty main" >> /etc/apt/sources.list.d/midokura.list
 
 touch /etc/apt/sources.list.d/datastax.list
 echo "deb http://debian.datastax.com/community stable main" >> /etc/apt/sources.list.d/datastax.list
