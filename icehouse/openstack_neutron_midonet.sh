@@ -46,7 +46,9 @@ curl -k "http://$repousername:$repopassword@apt.midokura.com/packages.midokura.k
 apt-get update
 apt-get install -y neutron-server neutron-dhcp-agent neutron-metadata-agent
 apt-get install -y python-midonetclient python-neutron-plugin-midonet
-apt-get install -y midonet-api tomcat7 zookeeper zookeeperd zkdump cassandra=2.0.10
+apt-get install -y tomcat7 zookeeper zookeeperd zkdump cassandra=2.0.10
+apt-get install -y midonet-api
+apt-mark hold cassandra
 
 # edit keystone conf file to use templates and mysql
 if [ -f /etc/neutron/neutron.conf.orig ]; then
@@ -58,8 +60,6 @@ fi
 
 # Edit the neutron.conf
 sed -i "s,connection = sqlite:////var/lib/neutron/neutron.sqlite,connection = mysql://neutron:$password@$managementip/neutron," /etc/neutron/neutron.conf
-
-sed -i "# auth_strategy = keystone" "auth_strategy = keystone" /etc/neutron/neutron.conf
 
 sed -i "s,%SERVICE_TENANT_NAME%,service," /etc/neutron/neutron.conf
 sed -i "s,%SERVICE_USER%,neutron," /etc/neutron/neutron.conf
