@@ -26,6 +26,9 @@ read -p "Please enter your midokura repo username: " repousername
 echo;
 read -p "Please enter your midokura repo password: " repopassword
 
+$password=$SG_SERVICE_PASSWORD
+$managementip=$SG_SERVICE_CONTROLLER_IP
+
 # Add the apt source entries
 touch /etc/apt/sources.list.d/midokura.list
 echo "deb http://$repousername:$repopassword@apt.midokura.com/midonet/v1.7/stable trusty main non-free\n" >> /etc/apt/sources.list.d/midokura.list
@@ -59,6 +62,10 @@ sed -i "# auth_strategy = keystone" "auth_strategy = keystone" /etc/neutron/neut
 sed -i "s,%SERVICE_TENANT_NAME%,service," /etc/neutron/neutron.conf
 sed -i "s,%SERVICE_USER%,neutron," /etc/neutron/neutron.conf
 sed -i "s,%SERVICE_PASSWORD%,$SG_SERVICE_PASSWORD," /etc/neutron/neutron.conf
+
+sed -i "s,# auth_strategy = keystone,auth_strategy = keystone,"
+
+sed -i "s,core_plugin = neutron.plugins.ml2.plugin.Ml2Plugin,core_plugin = midonet.neutron.plugin.MidonetPluginV2,"
 
 # Edit the dhcp_agent.ini
 sed -i "s,# use_namespaces = True,use_namespaces = True,"
