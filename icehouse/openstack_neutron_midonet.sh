@@ -113,7 +113,7 @@ echo "
      antiResourceLocking="false"
      privileged="true"
 />
-" >> /usr/share/tomcat7/Catalina/localhost/midonet-api.xml
+" >> /etc/tomcat7/Catalina/localhost/midonet-api.xml
 
 # Stop zookeeper and Cassandra
 service cassandra stop
