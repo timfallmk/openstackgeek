@@ -164,6 +164,16 @@ service neutron-metadata-agent restart
 service neutron-dhcp-agent restart
 service nova-compute restart
 
+# Setup midonet-cli
+touch ~/.midonetrc
+echo "
+[cli]
+api_url = http://$managementip:8080/midonet-api
+username = admin
+password = $password
+project_id = admin
+"
+
 echo;
 echo "#################################################################################################
 
