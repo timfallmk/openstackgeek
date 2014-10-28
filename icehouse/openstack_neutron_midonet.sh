@@ -101,7 +101,7 @@ keystone user-role-add --user midonet --tenant admin --role admin
 function get_id () {
     echo `$@ | awk '/ id / { print $4 }'`
 }
-NEUTRONSERVICEID=$(get_id keystone service-create --name neutron --type network --description "OpenStack Networking")
+NEUTRONSERVICEID=$(get_id keystone service-create --name neutron --type network --description Networking)
 keystone keystone endpoint-create --service-id $NEUTRONSERVICEID --publicurl http://"$managementip":9696 --adminurl http://"$managementip":9696 --internalurl http://"$managementip":9696
 
 # Set container preferences
