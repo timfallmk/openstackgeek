@@ -108,10 +108,10 @@ keystone endpoint-create --service-id $NEUTRONSERVICEID --publicurl http://"$man
 touch /etc/tomcat7/Catalina/localhost/midonet-api.xml
 echo "
 <Context
-     path="/midonet-api"
-     docBase="/usr/share/midonet-api"
-     antiResourceLocking="false"
-     privileged="true"
+     path=\"/midonet-api\"
+     docBase=\"/usr/share/midonet-api\"
+     antiResourceLocking=\"false\"
+     privileged=\"true\"
 />
 " >> /etc/tomcat7/Catalina/localhost/midonet-api.xml
 
