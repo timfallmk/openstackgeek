@@ -97,6 +97,13 @@ sed -i "s,NEUTRON_PLUGIN_CONFIG=\"/etc/neutron/plugins/ml2/ml2_conf.ini\",NEUTRO
 keystone user-create --name midonet --pass $password --email admin@localhost
 keystone user-role-add --user midonet --tenant admin --role admin
 
+# Register neutron service and endpoint
+function get_id () {
+    echo `$@ | awk '/ id / { print $4 }'`
+}
+NEUTRONSERVICEID=$(get_id keystone service-create --name neutron --type network --description "OpenStack Networking")
+keystone keystone endpoint-create --service-id $NEUTRONSERVICEID --publicurl http://"$managementip":9696 --adminurl http://"$managementip":9696 --internalurl http://"$managementip":9696
+
 # Set container preferences
 touch /usr/share/tomcat7/Catalina/localhost/midonet-api.xml
 echo "
