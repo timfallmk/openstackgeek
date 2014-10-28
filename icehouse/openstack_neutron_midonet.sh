@@ -137,7 +137,7 @@ service cassandra start
 service zookeeper start
 
 # API configuration
-sed -i "s,999888777666,$SG_SERVICE_TOKEN,"
+sed -i "s,999888777666,$SG_SERVICE_TOKEN," /usr/share/midonet-api/WEB-INF/web.xml
 
 # Set qemu port ACL's (this is kinda hacky, I want to find a better way of doing this substitution)
 echo "
