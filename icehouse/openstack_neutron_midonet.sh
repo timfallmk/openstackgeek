@@ -105,7 +105,7 @@ NEUTRONSERVICEID=$(get_id keystone service-create --name neutron --type network 
 keystone keystone endpoint-create --service-id $NEUTRONSERVICEID --publicurl http://"$managementip":9696 --adminurl http://"$managementip":9696 --internalurl http://"$managementip":9696
 
 # Set container preferences
-touch /usr/share/tomcat7/Catalina/localhost/midonet-api.xml
+touch /etc/tomcat7/Catalina/localhost/midonet-api.xml
 echo "
 <Context
      path="/midonet-api"
