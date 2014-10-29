@@ -180,8 +180,9 @@ MIDONETHOST=$(midonet-cli --eval list host | awk -F " " '{print $2}') # This sho
 TUNNELZONE=$(midonet-cli --eval tunnel-zone create name Default-GRE-Tunnel-Zone type gre)
 midonet-cli --eval tunnel-zone $TUNNELZONE member add host $MIDONETHOST address 127.0.0.1 # This needs to be input in multi-node as well
 MIDONETHOSTALIVE=$(midonet-cli --eval host $MIDONETHOST show alive)
-if ($MIDONETHOSTALIVE) echo "The host appears to be alive"
-else echo "The host appears to be dead"
+if ($MIDONETHOSTALIVE) then echo "The host appears to be alive"
+else then echo "The host appears to be dead"
+fi
 
 echo;
 echo "#################################################################################################
