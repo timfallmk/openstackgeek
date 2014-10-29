@@ -127,7 +127,7 @@ touch /etc/zookeeper/conf/myid
 echo "1" >> /etc/zookeeper/conf/myid
 
 # Cassandra configuration
-sed -i "s,Test Cluster,midonet,"
+sed -i "s,Test Cluster,midonet," /etc/cassandra/cassandra.yaml
 
 # Clear the Cassandra data directory
 rm -rf /var/lib/cassandra/data/
