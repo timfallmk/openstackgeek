@@ -175,6 +175,7 @@ project_id = admin
 " >> ~/.midonetrc
 
 # Create the default tunnel zone and add members
+echo "We'll setup the tunnel zone and add some memebers"
 MIDONETHOST=$(midonet-cli --eval list host | awk -F " " '{print $2}') # This should be looped for multi-node
 TUNNELZONE=$(midonet-cli --eval tunnel-zone create name Default-GRE-Tunnel-Zone type gre)
 midonet-cli --eval tunnel-zone $TUNNELZONE member add host $MIDONETHOST address 127.0.0.1 # This needs to be input in multi-node as well
