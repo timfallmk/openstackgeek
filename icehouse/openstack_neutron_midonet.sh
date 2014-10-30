@@ -122,7 +122,7 @@ service zookeeper stop
 # Zookeeper configuration
 echo "
 server.1=localhost:2888:3888
-" >> /etc/zookeeper/conf/zoo.conf
+" >> /etc/zookeeper/conf/zoo.cfg
 touch /etc/zookeeper/conf/myid
 echo "1" >> /etc/zookeeper/conf/myid
 
@@ -181,7 +181,7 @@ TUNNELZONE=$(midonet-cli --eval tunnel-zone create name Default-GRE-Tunnel-Zone 
 midonet-cli --eval tunnel-zone $TUNNELZONE member add host $MIDONETHOST address 127.0.0.1 # This needs to be input in multi-node as well
 MIDONETHOSTALIVE=$(midonet-cli --eval host $MIDONETHOST show alive)
 if [$MIDONETHOSTALIVE] then echo "The host appears to be alive"
-else then echo "The host appears to be dead"
+else echo "The host appears to be dead"
 fi
 
 echo;
